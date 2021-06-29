@@ -3,4 +3,3 @@ build/
 lib/
 *.o
 *.a
-bme280
