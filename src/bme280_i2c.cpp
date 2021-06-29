@@ -58,5 +58,37 @@ bool I2C_Dev::open(const char *IIC_Dev)
   device.write = user_i2c_write;
   device.delay_ms = user_delay_ms;
 
-  return 0 == bme280_init(&device);
+  result = bme280_init(&device);
+  return BME280_OK == result;
+}
+
+bool I2C_Dev::runForcedMode()
+{
+  uint8_t settings_sel;
+
+  /* Recommended mode of operation: Indoor navigation */
+  device.settings.osr_h = BME280_OVERSAMPLING_1X;
+  device.settings.osr_p = BME280_OVERSAMPLING_16X;
+  device.settings.osr_t = BME280_OVERSAMPLING_2X;
+  device.settings.filter = BME280_FILTER_COEFF_16;
+
+  settings_sel = BME280_OSR_PRESS_SEL | BME280_OSR_TEMP_SEL | BME280_OSR_HUM_SEL | BME280_FILTER_SEL;
+
+  result = bme280_set_sensor_settings(settings_sel, &device);
+  if (result != BME280_OK)
+  {
+    return false;
+  }
+
+  result = bme280_set_sensor_mode(BME280_FORCED_MODE, &device);
+  if (result != BME280_OK)
+  {
+    return false;
+  }
+
+  /* Wait for the measurement to complete and print data @25Hz */
+  device.delay_ms(40);
+  result = bme280_get_sensor_data(BME280_ALL, &data, &device);
+
+  return result == BME280_OK;
 }
