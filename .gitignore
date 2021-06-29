@@ -1,0 +1,6 @@
+__pycache__/
+build/
+lib/
+*.o
+*.a
+bme280
