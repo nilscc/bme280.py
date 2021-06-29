@@ -20,13 +20,5 @@ setuptools.setup(
             library_dirs=['lib'],
             libraries=['bme280'],
         ),
-        setuptools.Extension(
-            name='bme280.sensor_data',
-            language='c++',
-            sources=[os.path.join('src', 'bme280', 'sensor_data.pyx')],
-            include_dirs=['inc'],
-            library_dirs=['lib'],
-            libraries=['bme280'],
-        ),
     ], language_level=3),
 )
