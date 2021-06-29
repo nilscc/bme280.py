@@ -58,5 +58,5 @@ bool I2C_Dev::open(const char *IIC_Dev)
   device.write = user_i2c_write;
   device.delay_ms = user_delay_ms;
 
-  return true;
+  return 0 == bme280_init(&device);
 }
