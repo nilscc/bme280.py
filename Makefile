@@ -2,12 +2,15 @@ INCLUDE_DIR=inc/
 
 .PHONY: all clean
 
-all: lib/bme280.a build/bme280
+all: lib/libbme280.so build/bme280
 
 clean:
-	-rm lib/*.o lib/*.a build/bme280
+	-rm lib/*.o lib/*.a lib/*.so build/bme280
 
-lib/bme280.a: lib/bme280.o lib/bme280_i2c.o
+lib/libbme280.so: lib/bme280.o lib/bme280_i2c.o
+	gcc -shared $^ -o $@
+
+lib/libbme280.a: lib/bme280.o lib/bme280_i2c.o
 	ar rcs $@ $^
 
 lib/bme280.o: src/bme280.c inc/bme280.h inc/bme280_defs.h
